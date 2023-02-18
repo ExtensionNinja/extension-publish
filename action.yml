@@ -1,0 +1,33 @@
+name: "Browser Extension Publishing"
+description: "Publish browser extensions to web store automatically"
+author: "Extension.Ninja"
+inputs:
+  action:
+    description: "Action to perform"
+    default: "test"
+    required: true
+  clientID:
+    description: "OAUTH client ID"
+    required: true
+  clientSecret:
+    description: "OAUTH client secret"
+    required: true
+  clientRefreshToken:
+    description: "OAUTH refresh token"
+    required: true
+  extensionID:
+    description: "Your extension ID"
+    required: true
+  extensionFile:
+    description: "Extension zip file path"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.action }}
+    - ${{ inputs.clientID }}
+    - ${{ inputs.clientSecret }}
+    - ${{ inputs.clientRefreshToken }}
+    - ${{ inputs.extensionID }}
+    - ${{ inputs.extensionFile }}

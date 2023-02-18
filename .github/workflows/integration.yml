@@ -1,0 +1,20 @@
+name: Integration Test
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Self test
+        id: selftest
+        uses: ExtensionNinja/extension-publish@main
+        with:
+          action: test
+          clientID: a
+          clientSecret: b
+          clientRefreshToken: c
+          extensionID: d
+          extensionFile: e 
+      - name: Test action outcome
+        run: |
+          test "${{ steps.selftest.outputs.result }}" == "testOK"
