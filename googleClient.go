@@ -154,10 +154,20 @@ func uploadExtension(ctx context.Context, accessToken string, extensionID string
 }
 
 func publishExtension(ctx context.Context, accessToken string, extensionID string) (*ExtensionPublishResponse, error) {
-	resp, err := http.Post("https://www.googleapis.com/chromewebstore/v1.1/items/"+extensionID+"/publish", "application/json", nil)
+	req, err := http.NewRequest("POST", "https://www.googleapis.com/chromewebstore/v1.1/items/"+extensionID+"/publish", nil)
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Add("Authorization", "Bearer "+accessToken)
+	req.Header.Add("x-goog-api-version", "2")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
 	if resp.StatusCode != 200 {
 		errResp, _ := io.ReadAll(resp.Body)
 		return nil, fmt.Errorf("request failed. Err: %v", string(errResp))
